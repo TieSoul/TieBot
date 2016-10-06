@@ -1,18 +1,19 @@
+'use strict';
 const discord = require('discord.js');
 const fs = require('fs');
 const storage = require('node-persist');
 const XMLHttpRequest = require('xhr2');
 const FileReader = require('filereader');
 storage.initSync();
-var registry = storage.getItem('registry');
+let registry = storage.getItem('registry');
 if (!registry) {
 	registry = {};
 	storage.setItem('registry', registry);
 }
 
 String.prototype.scan = function(regex) {
-    if (!regex.global) throw "regex must have 'global' flag set";
-    var r = []
+    if (!regex.global) throw 'regex must have \'global\' flag set';
+    let r = [];
     this.replace(regex, function() {
         r.push(Array.prototype.slice.call(arguments, 1, -2));
     });
@@ -35,35 +36,35 @@ function addChild(node, word) {
 }
 
 function computeProbs(node) {
-	for (var c in node.children) {
-		var child = node.children[c];
+	for (let c in node.children) {
+		let child = node.children[c];
 		child.probability = child.count/node.totalCount;
 		computeProbs(child);
 	}
 }
 
 function selectWord(root, words) {
-	var node = root;
-	for (var i = 0; i < words.length; i++) {
+	let node = root;
+	for (let i = 0; i < words.length; i++) {
 		node = node.children[words[i]];
 		if (!node) return '\0';
 	}
 	r = Math.random();
-	for (var c in node.children) {
-		var child = node.children[c];
+	for (let c in node.children) {
+		let child = node.children[c];
 		r -= child.probability;
 		if (r < 0) return c;
 	}
 }
 
 function addSentence(root, line) {
-	var degree = root.degree;
+	let degree = root.degree;
 	line = ['\1'].concat(line.split(' '));
 	line.push('\0');
-	for (var j = 0; j < line.length - degree; j++) {
-		var f = line.slice(j, j+degree+1);
-		var node = root;
-		for (var k = 0; k < f.length; k++) {
+	for (let j = 0; j < line.length - degree; j++) {
+		let f = line.slice(j, j+degree+1);
+		let node = root;
+		for (let k = 0; k < f.length; k++) {
 			node = addChild(node, f[k]);
 		}
 	}
@@ -71,18 +72,18 @@ function addSentence(root, line) {
 }
 
 function constructMarkov(lines, degree) {
-	var root = new MarkovNode(degree);
-	for (var i = 0; i < lines.length; i++) {
+	let root = new MarkovNode(degree);
+	for (let i = 0; i < lines.length; i++) {
 		addSentence(root, lines[i]);
 	}
 	return root;
 }
 
 function makeSentence(root) {
-	var sentence = [];
-	var words = ['\1'];
-	var word;
-	var degree = root.degree;
+	let sentence = [];
+	let words = ['\1'];
+	let word;
+	let degree = root.degree;
 	while (word != '\0') {
 		word = selectWord(root, words);
 		if (word == '\0') break;
@@ -96,7 +97,7 @@ function makeSentence(root) {
 }
 
 
-var ZTD = {
+let ZTD = {
 	mysteriousThings: ['Q', 'Junpei\'s jacket', 'Blick Winkel', 'Carlos', 'Eric',
 						'Kyle', 'Zero', 'Gab', 'Mila', 'Diana', 'Junpei', 'Akane'],
 	participants: ['Q', 'Mila', 'Eric', 'Diana', 'Sigma', 'Phi', 'Carlos', 'Junpei', 'Akane'],
@@ -115,12 +116,12 @@ var ZTD = {
 };
 
 function randomZTDspoiler() {
-	var random = ZTD.templates[Math.floor(Math.random()*ZTD.templates.length)];
-	var str = "";
-	for (var i = 0; i < random.length; i++) {
-		var n = random[i];
+	let random = ZTD.templates[Math.floor(Math.random()*ZTD.templates.length)];
+	let str = "";
+	for (let i = 0; i < random.length; i++) {
+		let n = random[i];
 		if (n.charAt(0) == '%') {
-			var word = ZTD[n.substring(1)][Math.floor(Math.random()*ZTD[n.substring(1)].length)];
+			let word = ZTD[n.substring(1)][Math.floor(Math.random()*ZTD[n.substring(1)].length)];
 			str += word;
 		} else {
 			str += n;
@@ -135,9 +136,9 @@ try {
 } catch (e) {
 	file = [];
 }
-var markov = constructMarkov(file, 2);
+let markov = constructMarkov(file, 2);
 
-var bot = new discord.Client({autoReconnect: true});
+let bot = new discord.Client({autoReconnect: true});
 
 bot.on('ready', function () {
 	console.log('Ready!');
@@ -146,19 +147,19 @@ bot.on('ready', function () {
 
 bot.on('message', function (msg) {
 	if (msg.author != bot.user) {
-		var result = msg.content.scan(/(?:^|\s)\$((?:[^$]|\\.)*?[^\\])\$(?:\s|$)/g);
-		for (var i = 0; i < result.length; i++) {
-			var url = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(result[i][0]);
+		let result = msg.content.scan(/(?:^|\s)\$((?:[^$]|\\.)*?[^\\])\$(?:\s|$)/g);
+		for (let i = 0; i < result.length; i++) {
+			let url = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(result[i][0]);
 			msg.channel.sendMessage(url);
 		}
-		var result = msg.content.scan(/^!register (.+)$/g);
+		let result = msg.content.scan(/^!register (.+)$/g);
 		if (result.length > 0) {
-			var fields = result[0][0].split(',');
-			for (var i = 0; i < fields.length; i++) {
+			let fields = result[0][0].split(',');
+			for (let i = 0; i < fields.length; i++) {
 				fields[i] = fields[i].replace(/\s/g, '').toLowerCase();
-				var field = fields[i];
+				let field = fields[i];
 				registry[field] = registry[field] || [];
-				var index = registry[field].indexOf(msg.author.mention());
+				let index = registry[field].indexOf(msg.author.mention());
 				if (index === -1)
 					registry[field].push(msg.author.mention());
 			}
@@ -166,14 +167,14 @@ bot.on('message', function (msg) {
 			msg.channel.sendMessage("Success! You are now registered for the following proficiencies:\n" + result[0][0]);
 			return;
 		}
-		var result = msg.content.scan(/^!unregister (.+)$/g);
+		let result = msg.content.scan(/^!unregister (.+)$/g);
 		if (result.length > 0) {
-			var fields = result[0][0].split(',');
-			for (var i = 0; i < fields.length; i++) {
+			let fields = result[0][0].split(',');
+			for (let i = 0; i < fields.length; i++) {
 				fields[i] = fields[i].replace(/\s/g, '').toLowerCase();
-				var field = fields[i];
+				let field = fields[i];
 				if (registry[field]) {
-					var index = registry[field].indexOf(msg.author.mention());
+					let index = registry[field].indexOf(msg.author.mention());
 					if (index > -1) {
 						registry[field].splice(index, 1);
 					}
@@ -183,13 +184,13 @@ bot.on('message', function (msg) {
 			msg.channel.sendMessage("Success! You are now unregistered from the following proficiencies:\n" + result[0][0]);
 			return;
 		}
-		var result = msg.content.scan(/^!listproficiencies (.+)/g);
+		let result = msg.content.scan(/^!listproficiencies (.+)/g);
 		if (result.length > 0) {
-			var mention = result[0][0];
-			var str = "The user " + mention + " is proficient in:\n";
-			var profs = [];
-			for (var p in registry) {
-				var prof = registry[p];
+			let mention = result[0][0];
+			let str = "The user " + mention + " is proficient in:\n";
+			let profs = [];
+			for (let p in registry) {
+				let prof = registry[p];
 				if (prof.indexOf(mention) > -1) {
 					profs.push(p);
 				}
@@ -198,13 +199,13 @@ bot.on('message', function (msg) {
 			msg.channel.sendMessage(str);
 			return;
 		}
-		var result = msg.content.scan(/^!requesthelp (.+)$/g);
+		let result = msg.content.scan(/^!requesthelp (.+)$/g);
 		if (result.length > 0) {
-			var field = result[0][0].replace(/\s/g, '').toLowerCase();
-			var responseStr = "";
+			let field = result[0][0].replace(/\s/g, '').toLowerCase();
+			let responseStr = "";
 			if (registry[field]) {
 				responseStr = "Automatically mentioning all people with a reported proficiency in *" + result[0][0] + "*:\n"
-				for (var i = 0; i < registry[field].length; i++) {
+				for (let i = 0; i < registry[field].length; i++) {
 					responseStr += registry[field][i] + " ";
 				}
 			} else {
@@ -213,11 +214,11 @@ bot.on('message', function (msg) {
 			msg.channel.sendMessage(responseStr);
 			return;
 		}
-		var result = msg.content.scan(/^(!spoilZTD)$/g);
+		let result = msg.content.scan(/^(!spoilZTD)$/g);
 		if (result.length > 0) {
 			msg.channel.sendMessage(randomZTDspoiler());
 		}
-		var result = msg.content.scan(/^(!help)$/g);
+		let result = msg.content.scan(/^(!help)$/g);
 		if (result.length > 0) {
 			msg.channel.sendMessage( 
 							"List of commands:\n" +
