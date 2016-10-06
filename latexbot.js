@@ -3,21 +3,22 @@ const discord = require('discord.js');
 const fs = require('fs');
 const storage = require('node-persist');
 
-storage.initSync();
-let registry = storage.getItem('registry');
-if (!registry) {
-	registry = {};
-	storage.setItem('registry', registry);
-}
-
-String.prototype.scan = function(regex) {
+Object.defineProperty(String.prototype, 'scan', 
+{ value: function(regex) {
     if (!regex.global) throw 'regex must have \'global\' flag set';
     let r = [];
     this.replace(regex, function() {
         r.push(Array.prototype.slice.call(arguments, 1, -2));
     });
     return r;
-};
+}});
+
+storage.initSync();
+let registry = storage.getItem('registry');
+if (!registry) {
+	registry = {};
+	storage.setItem('registry', registry);
+}
 
 let MarkovNode = function(degree) {
 	this.children = {};
