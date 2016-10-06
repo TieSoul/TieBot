@@ -19,7 +19,7 @@ String.prototype.scan = function(regex) {
     return r;
 };
 
-MarkovNode = function(degree) {
+let MarkovNode = function(degree) {
 	this.children = {};
 	this.probability = 0;
 	this.count = 0;
@@ -35,11 +35,10 @@ function addChild(node, word) {
 }
 
 function computeProbs(node) {
-	for (let c in node.children) {
-		let child = node.children[c];
+	node.children.forEach(function(child, index, array) {
 		child.probability = child.count/node.totalCount;
 		computeProbs(child);
-	}
+	});
 }
 
 function selectWord(root, words) {
@@ -48,7 +47,7 @@ function selectWord(root, words) {
 		node = node.children[words[i]];
 		if (!node) return '\0';
 	}
-	r = Math.random();
+	let r = Math.random();
 	for (let c in node.children) {
 		let child = node.children[c];
 		r -= child.probability;
@@ -133,7 +132,8 @@ function randomZTDspoiler() {
 	for (let i = 0; i < random.length; i++) {
 		let n = random[i];
 		if (n.charAt(0) === '%') {
-			let word = ZTD[n.substring(1)][Math.floor(Math.random()*ZTD[n.substring(1)].length)];
+			let word = ZTD[n.substring(1)]
+			[Math.floor(Math.random()*ZTD[n.substring(1)].length)];
 			str += word;
 		} else {
 			str += n;
@@ -142,7 +142,7 @@ function randomZTDspoiler() {
 	return str;
 }
 
-
+let file;
 try {
 	file = fs.readFileSync('./markov.txt').toString().split('\n');
 } catch (e) {
@@ -175,7 +175,8 @@ bot.on('message', function (msg) {
 				fields[i] = fields[i].replace(/\s/g, '').toLowerCase();
 				let field = fields[i];
 				registry[field] = registry[field] || [];
-				let index = registry[field].indexOf(msg.author.mention());
+				let index = registry[field].
+				indexOf(msg.author.mention());
 				if (index === -1)
 					registry[field].push(msg.author.mention());
 			}
@@ -249,7 +250,7 @@ bot.on('message', function (msg) {
 			msg.channel.sendMessage( 
 							'List of commands:\n' +
 							'if you mention me I\'ll respond ;)\n' +
-							"-----\n" +
+							'-----\n' +
 							'!help - you just used this, ' +
 							'you know what it does.\n' +
 							'!register <list of proficiencies' +
