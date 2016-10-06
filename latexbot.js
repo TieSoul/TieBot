@@ -2,8 +2,7 @@
 const discord = require('discord.js');
 const fs = require('fs');
 const storage = require('node-persist');
-const XMLHttpRequest = require('xhr2');
-const FileReader = require('filereader');
+
 storage.initSync();
 let registry = storage.getItem('registry');
 if (!registry) {
@@ -233,7 +232,8 @@ bot.on('message', function (msg) {
 					responseStr += registry[field][i] + ' ';
 				}
 			} else {
-				responseStr = 'Sorry, but nobody has reported a proficiency in *' +
+				responseStr = 'Sorry, but nobody has ' +
+				'reported a proficiency in *' +
 				result[0][0] + '*.';
 			}
 			msg.channel.sendMessage(responseStr);
@@ -246,12 +246,19 @@ bot.on('message', function (msg) {
 		let result = msg.content.scan(/^(!help)$/g);
 		if (result.length > 0) {
 			msg.channel.sendMessage( 
-							"List of commands:\n" +
-							"if you mention me I'll respond ;)\n" +
+							'List of commands:\n' +
+							'if you mention me I\'ll respond ;)\n' +
 							"-----\n" +
-							"!help - you just used this, you know what it does.\n" +
-							"!register <list of proficiencies separated by commas> - registers you in the help registry\n" +
-							"!requesthelp <proficiency> - calls for help from all people who have registered under the requested proficiency."
+							'!help - you just used this, ' +
+							'you know what it does.\n' +
+							'!register <list of proficiencies' +
+							' separated by commas>' +
+							' - registers you in the help registry\n' +
+							'!requesthelp <proficiency>' +
+							' - calls for help' +
+							'from all people who have' +
+							' registered under the' +
+							' requested proficiency.'
 							);
 			return;
 		}
