@@ -233,7 +233,7 @@ bot.on('message', function (msg) {
 					responseStr += registry[field][i] + ' ';
 				}
 			} else {
-				responseStr = 'Sorry, but nobody has reported a proficiency in *' + 
+				responseStr = 'Sorry, but nobody has reported a proficiency in *' +
 				result[0][0] + '*.';
 			}
 			msg.channel.sendMessage(responseStr);
