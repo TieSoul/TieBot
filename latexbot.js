@@ -58,7 +58,7 @@ function selectWord(root, words) {
 
 function addSentence(root, line) {
 	let degree = root.degree;
-	line = ['\1'].concat(line.split(' '));
+	line = [parseInt('\u0001',8)].concat(line.split(' '));
 	line.push('\0');
 	for (let j = 0; j < line.length - degree; j++) {
 		let f = line.slice(j, j+degree+1);
@@ -80,7 +80,7 @@ function constructMarkov(lines, degree) {
 
 function makeSentence(root) {
 	let sentence = [];
-	let words = ['\1'];
+	let words = [parseInt('\u0001',8)];
 	let word;
 	let degree = root.degree;
 	while (word !== '\0') {
