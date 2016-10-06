@@ -36,9 +36,11 @@ function addChild(node, word) {
 }
 
 function computeProbs(node) {
-	node.children.forEach(function(child, index, array) {
-		child.probability = child.count/node.totalCount;
-		computeProbs(child);
+	Object.keys(node.children).forEach(function(child, index) {
+		node.children[child]
+		.probability = node.children[child]
+		.count/node.totalCount;
+		computeProbs(node.children[child]);
 	});
 }
 
@@ -177,9 +179,9 @@ bot.on('message', function (msg) {
 				let field = fields[i];
 				registry[field] = registry[field] || [];
 				let index = registry[field].
-				indexOf(msg.author.mention());
+				indexOf(msg.author.toString());
 				if (index === -1)
-					registry[field].push(msg.author.mention());
+					registry[field].push(msg.author.toString());
 			}
 			storage.setItem('registry', registry);
 			msg.channel.sendMessage(
@@ -196,7 +198,7 @@ bot.on('message', function (msg) {
 				let field = fields[i];
 				if (registry[field]) {
 					let index = registry[field].
-					indexOf(msg.author.mention());
+					indexOf(msg.author.toString());
 					if (index > -1) {
 						registry[field].splice(index, 1);
 					}
@@ -273,5 +275,5 @@ bot.on('message', function (msg) {
 	}
 });
 
-bot.login('token');
-bot.login('token');
+bot.login('MTM5MTExMzEzMzYzMTczMzc4.CoNujg.r6KGAw9-L0XYnDUbdMVwlg4h0N0');
+bot.login('MTM5MTExMzEzMzYzMTczMzc4.CgKcWw.J6GwXa36C5IMQaJke8D-N5P4XiU');

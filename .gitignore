@@ -45,3 +45,6 @@ botconfig.yml
 
 # Unit tests containing sensitive information
 test/testloadauth.js
+
+# storage
+.node-persist/
