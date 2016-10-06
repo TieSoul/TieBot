@@ -158,8 +158,9 @@ bot.on('ready', function () {
 });
 
 bot.on('message', function (msg) {
+	let result;
 	if (msg.author !== bot.user) {
-		let result = msg.content.
+		result = msg.content.
 		scan(/(?:^|\s)\$((?:[^$]|\\.)*?[^\\])\$(?:\s|$)/g);
 		for (let i = 0; i < result.length; i++) {
 			let url = 
@@ -167,7 +168,7 @@ bot.on('message', function (msg) {
 			encodeURIComponent(result[i][0]);
 			msg.channel.sendMessage(url);
 		}
-		let result = msg.content.scan(/^!register (.+)$/g);
+		result = msg.content.scan(/^!register (.+)$/g);
 		if (result.length > 0) {
 			let fields = result[0][0].split(',');
 			for (let i = 0; i < fields.length; i++) {
@@ -185,7 +186,7 @@ bot.on('message', function (msg) {
 				result[0][0]);
 			return;
 		}
-		let result = msg.content.scan(/^!unregister (.+)$/g);
+		result = msg.content.scan(/^!unregister (.+)$/g);
 		if (result.length > 0) {
 			let fields = result[0][0].split(',');
 			for (let i = 0; i < fields.length; i++) {
@@ -205,7 +206,7 @@ bot.on('message', function (msg) {
 			result[0][0]);
 			return;
 		}
-		let result = msg.content.scan(/^!listproficiencies (.+)/g);
+		result = msg.content.scan(/^!listproficiencies (.+)/g);
 		if (result.length > 0) {
 			let mention = result[0][0];
 			let str = 'The user ' + mention + ' is proficient in:\n';
@@ -220,7 +221,7 @@ bot.on('message', function (msg) {
 			msg.channel.sendMessage(str);
 			return;
 		}
-		let result = msg.content.scan(/^!requesthelp (.+)$/g);
+		result = msg.content.scan(/^!requesthelp (.+)$/g);
 		if (result.length > 0) {
 			let field = result[0][0].replace(/\s/g, '').toLowerCase();
 			let responseStr = '';
@@ -239,11 +240,11 @@ bot.on('message', function (msg) {
 			msg.channel.sendMessage(responseStr);
 			return;
 		}
-		let result = msg.content.scan(/^(!spoilZTD)$/g);
+		result = msg.content.scan(/^(!spoilZTD)$/g);
 		if (result.length > 0) {
 			msg.channel.sendMessage(randomZTDspoiler());
 		}
-		let result = msg.content.scan(/^(!help)$/g);
+		result = msg.content.scan(/^(!help)$/g);
 		if (result.length > 0) {
 			msg.channel.sendMessage( 
 							'List of commands:\n' +
