@@ -1,0 +1,24 @@
+{
+  "name": "tiebot",
+  "version": "1.0.0",
+  "description": "Discord bot for requesting help, as well as to chat with",
+  "main": "latexbot.js",
+  "engines": {
+    "node": "6.7.0"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha",
+    "cover": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec",
+    "doc": "./node_modules/.bin/jsdoc -c conf.json -t ./node_modules/ink-docstrap/template -R README.md -r ."
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "help",
+    "chat"
+  ],
+  "author": "TieSoul",
+  "dependencies": {
+    "discord.js": "9.3.0"
+  }
+}

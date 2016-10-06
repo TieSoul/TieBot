@@ -1,8 +1,8 @@
-var discord = require('discord.js');
-var fs = require('fs');
-var storage = require('node-persist');
-var XMLHttpRequest = require('xhr2');
-var FileReader = require('filereader');
+const discord = require('discord.js');
+const fs = require('fs');
+const storage = require('node-persist');
+const XMLHttpRequest = require('xhr2');
+const FileReader = require('filereader');
 storage.initSync();
 var registry = storage.getItem('registry');
 if (!registry) {
@@ -141,17 +141,15 @@ var bot = new discord.Client({autoReconnect: true});
 
 bot.on('ready', function () {
 	console.log('Ready!');
-	bot.setPlayingGame('the Markov game');
+	bot.user.setStatus('the Markov game');
 });
 
 bot.on('message', function (msg) {
 	if (msg.author != bot.user) {
 		var result = msg.content.scan(/(?:^|\s)\$((?:[^$]|\\.)*?[^\\])\$(?:\s|$)/g);
 		for (var i = 0; i < result.length; i++) {
-			bot.startTyping(msg.channel);
 			var url = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(result[i][0]);
-			bot.sendMessage(msg.channel, url)
-			bot.stopTyping(msg.channel);
+			msg.channel.sendMessage(url);
 		}
 		var result = msg.content.scan(/^!register (.+)$/g);
 		if (result.length > 0) {
@@ -165,7 +163,7 @@ bot.on('message', function (msg) {
 					registry[field].push(msg.author.mention());
 			}
 			storage.setItem('registry', registry);
-			bot.sendMessage(msg.channel, "Success! You are now registered for the following proficiencies:\n" + result[0][0]);
+			msg.channel.sendMessage("Success! You are now registered for the following proficiencies:\n" + result[0][0]);
 			return;
 		}
 		var result = msg.content.scan(/^!unregister (.+)$/g);
@@ -182,7 +180,7 @@ bot.on('message', function (msg) {
 				}
 			}
 			storage.setItem('registry', registry);
-			bot.sendMessage(msg.channel, "Success! You are now unregistered from the following proficiencies:\n" + result[0][0]);
+			msg.channel.sendMessage("Success! You are now unregistered from the following proficiencies:\n" + result[0][0]);
 			return;
 		}
 		var result = msg.content.scan(/^!listproficiencies (.+)/g);
@@ -197,7 +195,7 @@ bot.on('message', function (msg) {
 				}
 			}
 			str += profs.join(', ');
-			bot.sendMessage(msg.channel, str);
+			msg.channel.sendMessage(str);
 			return;
 		}
 		var result = msg.content.scan(/^!requesthelp (.+)$/g);
@@ -212,16 +210,16 @@ bot.on('message', function (msg) {
 			} else {
 				responseStr = "Sorry, but nobody has reported a proficiency in *" + result[0][0] + "*.";
 			}
-			bot.sendMessage(msg.channel, responseStr);
+			msg.channel.sendMessage(responseStr);
 			return;
 		}
 		var result = msg.content.scan(/^(!spoilZTD)$/g);
 		if (result.length > 0) {
-			bot.sendMessage(msg.channel, randomZTDspoiler());
+			msg.channel.sendMessage(randomZTDspoiler());
 		}
 		var result = msg.content.scan(/^(!help)$/g);
 		if (result.length > 0) {
-			bot.sendMessage(msg.author, 
+			msg.channel.sendMessage( 
 							"List of commands:\n" +
 							"if you mention me I'll respond ;)\n" +
 							"-----\n" +
@@ -234,11 +232,10 @@ bot.on('message', function (msg) {
 		/*fs.appendFileSync('./markov.txt', msg.content + "\n");
 		addSentence(markov, msg.content);*/
 		if (msg.isMentioned(bot.user)) {
-			bot.startTyping(msg.channel);
-			bot.reply(msg, makeSentence(markov));
-			bot.stopTyping(msg.channel);
+			msg.channel.sendMessage(makeSentence(markov));
 		}
 	}
 });
 
-bot.loginWithToken('insert token here');
+bot.login('token');
+bot.login('token');
