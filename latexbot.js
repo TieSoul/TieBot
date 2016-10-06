@@ -84,9 +84,9 @@ function makeSentence(root) {
 	let words = ['\1'];
 	let word;
 	let degree = root.degree;
-	while (word != '\0') {
+	while (word !== '\0') {
 		word = selectWord(root, words);
-		if (word == '\0') break;
+		if (word === '\0') break;
 		sentence.push(word);
 		words.push(word);
 		if (words.length > degree) {
@@ -98,29 +98,42 @@ function makeSentence(root) {
 
 
 let ZTD = {
-	mysteriousThings: ['Q', 'Junpei\'s jacket', 'Blick Winkel', 'Carlos', 'Eric',
-						'Kyle', 'Zero', 'Gab', 'Mila', 'Diana', 'Junpei', 'Akane'],
-	participants: ['Q', 'Mila', 'Eric', 'Diana', 'Sigma', 'Phi', 'Carlos', 'Junpei', 'Akane'],
-	allCharacters: ['Q', 'Mila', 'Eric', 'Diana', 'Sigma', 'Phi', 'Carlos', 'Junpei', 'Akane',
-					'Gab', 'Zero', 'Brother', 'Left', 'Quark', 'Clover'],
-	revealThings: ['Q', 'Mila', 'Eric', 'Diana', 'Sigma', 'Phi', 'Carlos', 'Junpei', 'Akane',
-					'Gab', 'Zero', 'Brother', 'Left', 'Quark', 'Clover', 'fake',
-					'an AI', 'non-existant'],
-	secrets: ['They are actually Ace in disguise.', 'They have time travelled backwards.',
-			  'They are really Carlos\'s little sister.', 'They know about the Radical-6 outbreak.',
-			  'They are working with Zero.', 'They actually don\'t exist.'],
-	times: ['Early in the game', 'In the middle of the game', 'In a bad end', 'In the true end'],
-	templates: [['%times', ', it is revealed that ', '%mysteriousThings', ' is actually ', '%revealThings'],
-				['%participants', ' is forced to kill ', '%participants', ', regardless of the ending.'],
-				['%times', ', ', '%participants', ' tells the others their big secret: ', '%secrets']]
+	mysteriousThings: ['Q', 'Junpei\'s jacket', 
+	'Blick Winkel', 'Carlos', 'Eric',
+	'Kyle', 'Zero', 'Gab', 'Mila', 'Diana', 
+	'Junpei', 'Akane'],
+	participants: ['Q', 'Mila', 'Eric', 'Diana', 'Sigma', 
+	'Phi', 'Carlos', 'Junpei', 'Akane'],
+	allCharacters: ['Q', 'Mila', 'Eric', 'Diana', 
+	'Sigma', 'Phi', 'Carlos', 'Junpei', 'Akane',
+	'Gab', 'Zero', 'Brother', 'Left', 'Quark', 'Clover'],
+	revealThings: ['Q', 'Mila', 'Eric', 'Diana', 'Sigma', 
+	'Phi', 'Carlos', 'Junpei', 'Akane',
+	'Gab', 'Zero', 'Brother', 'Left', 
+	'Quark', 'Clover', 'fake',
+	'an AI', 'non-existant'],
+	secrets: ['They are actually Ace in disguise.', 
+	'They have time travelled backwards.',
+	'They are really Carlos\'s little sister.', 
+	'They know about the Radical-6 outbreak.',
+	'They are working with Zero.', 'They actually don\'t exist.'],
+	times: ['Early in the game', 'In the middle of the game', 
+	'In a bad end', 'In the true end'],
+	templates: [['%times', ', it is revealed that ', 
+	'%mysteriousThings', ' is actually ', '%revealThings'],
+	['%participants', ' is forced to kill ', 
+	'%participants', ', regardless of the ending.'],
+	['%times', ', ', '%participants', 
+	' tells the others their big secret: ', '%secrets']]
 };
 
 function randomZTDspoiler() {
-	let random = ZTD.templates[Math.floor(Math.random()*ZTD.templates.length)];
-	let str = "";
+	let random = ZTD.templates[Math.
+	floor(Math.random()*ZTD.templates.length)];
+	let str = '';
 	for (let i = 0; i < random.length; i++) {
 		let n = random[i];
-		if (n.charAt(0) == '%') {
+		if (n.charAt(0) === '%') {
 			let word = ZTD[n.substring(1)][Math.floor(Math.random()*ZTD[n.substring(1)].length)];
 			str += word;
 		} else {
@@ -146,10 +159,13 @@ bot.on('ready', function () {
 });
 
 bot.on('message', function (msg) {
-	if (msg.author != bot.user) {
-		let result = msg.content.scan(/(?:^|\s)\$((?:[^$]|\\.)*?[^\\])\$(?:\s|$)/g);
+	if (msg.author !== bot.user) {
+		let result = msg.content.
+		scan(/(?:^|\s)\$((?:[^$]|\\.)*?[^\\])\$(?:\s|$)/g);
 		for (let i = 0; i < result.length; i++) {
-			let url = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(result[i][0]);
+			let url = 
+			'http://chart.apis.google.com/chart?cht=tx&chl=' + 
+			encodeURIComponent(result[i][0]);
 			msg.channel.sendMessage(url);
 		}
 		let result = msg.content.scan(/^!register (.+)$/g);
@@ -164,7 +180,10 @@ bot.on('message', function (msg) {
 					registry[field].push(msg.author.mention());
 			}
 			storage.setItem('registry', registry);
-			msg.channel.sendMessage("Success! You are now registered for the following proficiencies:\n" + result[0][0]);
+			msg.channel.sendMessage(
+				'Success! You are now registered' + 
+				'for the following proficiencies:\n' +
+				result[0][0]);
 			return;
 		}
 		let result = msg.content.scan(/^!unregister (.+)$/g);
@@ -174,20 +193,23 @@ bot.on('message', function (msg) {
 				fields[i] = fields[i].replace(/\s/g, '').toLowerCase();
 				let field = fields[i];
 				if (registry[field]) {
-					let index = registry[field].indexOf(msg.author.mention());
+					let index = registry[field].
+					indexOf(msg.author.mention());
 					if (index > -1) {
 						registry[field].splice(index, 1);
 					}
 				}
 			}
 			storage.setItem('registry', registry);
-			msg.channel.sendMessage("Success! You are now unregistered from the following proficiencies:\n" + result[0][0]);
+			msg.channel.sendMessage('Success! You are now ' +
+			'unregistered from the following proficiencies:\n' + 
+			result[0][0]);
 			return;
 		}
 		let result = msg.content.scan(/^!listproficiencies (.+)/g);
 		if (result.length > 0) {
 			let mention = result[0][0];
-			let str = "The user " + mention + " is proficient in:\n";
+			let str = 'The user ' + mention + ' is proficient in:\n';
 			let profs = [];
 			for (let p in registry) {
 				let prof = registry[p];
@@ -202,14 +224,17 @@ bot.on('message', function (msg) {
 		let result = msg.content.scan(/^!requesthelp (.+)$/g);
 		if (result.length > 0) {
 			let field = result[0][0].replace(/\s/g, '').toLowerCase();
-			let responseStr = "";
+			let responseStr = '';
 			if (registry[field]) {
-				responseStr = "Automatically mentioning all people with a reported proficiency in *" + result[0][0] + "*:\n"
+				responseStr = 'Automatically mentioning all ' + 
+				'people with a reported proficiency in *' + 
+				result[0][0] + '*:\n';
 				for (let i = 0; i < registry[field].length; i++) {
-					responseStr += registry[field][i] + " ";
+					responseStr += registry[field][i] + ' ';
 				}
 			} else {
-				responseStr = "Sorry, but nobody has reported a proficiency in *" + result[0][0] + "*.";
+				responseStr = 'Sorry, but nobody has reported a proficiency in *' + 
+				result[0][0] + '*.';
 			}
 			msg.channel.sendMessage(responseStr);
 			return;
