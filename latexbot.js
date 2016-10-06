@@ -275,5 +275,6 @@ bot.on('message', function (msg) {
 	}
 });
 
-bot.login('MTM5MTExMzEzMzYzMTczMzc4.CoNujg.r6KGAw9-L0XYnDUbdMVwlg4h0N0');
-bot.login('MTM5MTExMzEzMzYzMTczMzc4.CgKcWw.J6GwXa36C5IMQaJke8D-N5P4XiU');
+bot.login('token');
+bot.login('token');
+bot.login('token');
