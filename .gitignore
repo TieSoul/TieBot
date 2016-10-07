@@ -48,3 +48,6 @@ test/testloadauth.js
 
 # storage
 .node-persist/
+
+#Markov data
+markov.txt
