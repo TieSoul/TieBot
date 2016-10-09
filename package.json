@@ -19,6 +19,7 @@
   ],
   "author": "TieSoul",
   "dependencies": {
+    "bluebird": "3.4.6",
     "discord.js": "9.3.0",
     "node-persist": "^2.0.2"
   },
