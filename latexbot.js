@@ -1,7 +1,8 @@
 'use strict';
 const discord = require('discord.js');
-const fs = require('fs');
-const storage = require('node-persist');
+const Promise = require('bluebird');
+const fs = Promise.promisifyAll(require('fs'));
+const storage = Promise.promisifyAll(require('node-persist'));
 
 Object.defineProperty(String.prototype, 'scan', 
 { value: function(regex) {
@@ -23,7 +24,7 @@ if (!registry) {
 let MarkovNode = function(degree) {
 	this.children = {};
 	this.probability = 0;
-	this.count = 0;
+	this.count = 0;0
 	this.totalCount = 0;
 	this.degree = degree || 0;
 };
