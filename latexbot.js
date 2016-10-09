@@ -36,7 +36,7 @@ function addChild(node, word) {
 }
 
 function computeProbs(node) {
-	Object.keys(node.children).forEach(function(child, index) {
+	Object.keys(node.children).forEach(function(child) {
 		node.children[child]
 		.probability = node.children[child]
 		.count/node.totalCount;
@@ -51,11 +51,11 @@ function selectWord(root, words) {
 		if (!node) return '\0';
 	}
 	let r = Math.random();
-	for (let c in node.children) {
+	Object.keys(node.children).forEach(function (c) {
 		let child = node.children[c];
 		r -= child.probability;
 		if (r < 0) return c;
-	}
+	});
 }
 
 function addSentence(root, line) {
@@ -267,8 +267,8 @@ bot.on('message', function (msg) {
 							);
 			return;
 		}
-		/*fs.appendFileSync('./markov.txt', msg.content + "\n");
-		addSentence(markov, msg.content);*/
+		fs.appendFile('./markov.txt', msg.content + "\n");
+		addSentence(markov, msg.content);
 		if (msg.isMentioned(bot.user)) {
 			msg.channel.sendMessage(makeSentence(markov));
 		}
