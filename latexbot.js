@@ -158,7 +158,10 @@ let bot = new discord.Client({autoReconnect: true});
 
 bot.on('ready', function () {
 	console.log('Ready!');
-	bot.user.setStatus('the Markov game');
+	bot.user.setStatus('the Markov game')
+	.catch(function(e) {
+		console.error(e.stack);
+	});
 });
 
 bot.on('message', function (msg) {
@@ -184,11 +187,17 @@ bot.on('message', function (msg) {
 				if (index === -1)
 					registry[field].push(msg.author.toString());
 			}
-			storage.setItem('registry', registry);
+			storage.setItem('registry', registry)
+			.catch(function(e) {
+				console.error(e.stack);
+			});
 			msg.channel.sendMessage(
 				'Success! You are now registered' + 
 				'for the following proficiencies:\n' +
-				result[0][0]);
+				result[0][0])
+			.catch(function(e) {
+				console.error(e.stack);
+			});
 			return;
 		}
 		result = msg.content.scan(/^!unregister (.+)$/g);
@@ -208,7 +217,10 @@ bot.on('message', function (msg) {
 			storage.setItem('registry', registry);
 			msg.channel.sendMessage('Success! You are now ' +
 			'unregistered from the following proficiencies:\n' + 
-			result[0][0]);
+			result[0][0])
+			.catch(function(e) {
+				console.error(e.stack);
+			});
 			return;
 		}
 		result = msg.content.scan(/^!listproficiencies (.+)/g);
@@ -223,7 +235,10 @@ bot.on('message', function (msg) {
 				}
 			}
 			str += profs.join(', ');
-			msg.channel.sendMessage(str);
+			msg.channel.sendMessage(str)
+			.catch(function(e) {
+				console.error(e.stack);
+			});
 			return;
 		}
 		result = msg.content.scan(/^!requesthelp (.+)$/g);
@@ -242,12 +257,18 @@ bot.on('message', function (msg) {
 				'reported a proficiency in *' +
 				result[0][0] + '*.';
 			}
-			msg.channel.sendMessage(responseStr);
+			msg.channel.sendMessage(responseStr)
+			.catch(function(e) {
+				console.error(e.stack);
+			});
 			return;
 		}
 		result = msg.content.scan(/^(!spoilZTD)$/g);
 		if (result.length > 0) {
-			msg.channel.sendMessage(randomZTDspoiler());
+			msg.channel.sendMessage(randomZTDspoiler())
+			.catch(function(e) {
+				console.error(e.stack);
+			});
 		}
 		result = msg.content.scan(/^(!help)$/g);
 		if (result.length > 0) {
@@ -265,7 +286,9 @@ bot.on('message', function (msg) {
 							'from all people who have' +
 							' registered under the' +
 							' requested proficiency.'
-							);
+							).catch(function(e) {
+								console.error(e.stack);
+							});
 			return;
 		}
 		fs.appendFile('./markov.txt', msg.content + '\n')
@@ -274,7 +297,10 @@ bot.on('message', function (msg) {
 		});
 		addSentence(markov, msg.content);
 		if (msg.isMentioned(bot.user)) {
-			msg.channel.sendMessage(makeSentence(markov));
+			msg.channel.sendMessage(makeSentence(markov))
+			.catch(function(e) {
+				console.error(e.stack);
+			});
 		}
 	}
 });
