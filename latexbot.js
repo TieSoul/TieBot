@@ -24,7 +24,7 @@ if (!registry) {
 let MarkovNode = function(degree) {
 	this.children = {};
 	this.probability = 0;
-	this.count = 0;0
+	this.count = 0;
 	this.totalCount = 0;
 	this.degree = degree || 0;
 };
@@ -268,7 +268,10 @@ bot.on('message', function (msg) {
 							);
 			return;
 		}
-		fs.appendFile('./markov.txt', msg.content + "\n");
+		fs.appendFile('./markov.txt', msg.content + '\n')
+		.catch(function(e) {
+			console.error(e.stack);
+		});
 		addSentence(markov, msg.content);
 		if (msg.isMentioned(bot.user)) {
 			msg.channel.sendMessage(makeSentence(markov));
@@ -276,6 +279,10 @@ bot.on('message', function (msg) {
 	}
 });
 
-bot.login('token');
-bot.login('token');
-bot.login('token');
+Promise.all([
+	bot.login('token'),
+	bot.login('token'),
+	bot.login('token')
+]).catch(function(e) {
+	console.error('Error logging in:', e.stack);
+});
