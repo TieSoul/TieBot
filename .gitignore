@@ -51,3 +51,5 @@ test/testloadauth.js
 
 #Markov data
 markov.txt
+
+.vscode/
