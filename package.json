@@ -4,7 +4,7 @@
   "description": "Discord bot for requesting help, as well as to chat with",
   "main": "latexbot.js",
   "engines": {
-    "node": "6.7.0"
+    "node": "6.8.0"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha",
