@@ -4,6 +4,8 @@ const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 const storage = Promise.promisifyAll(require('node-persist'));
 
+const token = process.env.TIE_TOKEN;
+
 Object.defineProperty(String.prototype, 'scan', 
 { value: function(regex) {
     if (!regex.global) throw 'regex must have \'global\' flag set';
@@ -160,7 +162,7 @@ bot.on('ready', function () {
 	console.log('Ready!');
 	bot.user.setStatus('the Markov game')
 	.catch(function(e) {
-		console.error(e.stack);
+		console.error(e);
 	});
 });
 
@@ -189,14 +191,14 @@ bot.on('message', function (msg) {
 			}
 			storage.setItem('registry', registry)
 			.catch(function(e) {
-				console.error(e.stack);
+				console.error(e);
 			});
 			msg.channel.sendMessage(
 				'Success! You are now registered' + 
 				'for the following proficiencies:\n' +
 				result[0][0])
 			.catch(function(e) {
-				console.error(e.stack);
+				console.error(e);
 			});
 			return;
 		}
@@ -219,7 +221,7 @@ bot.on('message', function (msg) {
 			'unregistered from the following proficiencies:\n' + 
 			result[0][0])
 			.catch(function(e) {
-				console.error(e.stack);
+				console.error(e);
 			});
 			return;
 		}
@@ -237,7 +239,7 @@ bot.on('message', function (msg) {
 			str += profs.join(', ');
 			msg.channel.sendMessage(str)
 			.catch(function(e) {
-				console.error(e.stack);
+				console.error(e);
 			});
 			return;
 		}
@@ -259,7 +261,7 @@ bot.on('message', function (msg) {
 			}
 			msg.channel.sendMessage(responseStr)
 			.catch(function(e) {
-				console.error(e.stack);
+				console.error(e);
 			});
 			return;
 		}
@@ -267,7 +269,7 @@ bot.on('message', function (msg) {
 		if (result.length > 0) {
 			msg.channel.sendMessage(randomZTDspoiler())
 			.catch(function(e) {
-				console.error(e.stack);
+				console.error(e);
 			});
 		}
 		result = msg.content.scan(/^(!help)$/g);
@@ -287,28 +289,22 @@ bot.on('message', function (msg) {
 							' registered under the' +
 							' requested proficiency.'
 							).catch(function(e) {
-								console.error(e.stack);
+								console.error(e);
 							});
 			return;
 		}
 		fs.appendFile('./markov.txt', msg.content + '\n')
 		.catch(function(e) {
-			console.error(e.stack);
+			console.error(e);
 		});
 		addSentence(markov, msg.content);
 		if (msg.isMentioned(bot.user)) {
 			msg.channel.sendMessage(makeSentence(markov))
 			.catch(function(e) {
-				console.error(e.stack);
+				console.error(e);
 			});
 		}
 	}
 });
 
-Promise.all([
-	bot.login('token'),
-	bot.login('token'),
-	bot.login('token')
-]).catch(function(e) {
-	console.error('Error logging in:', e.stack);
-});
+bot.login(token);
