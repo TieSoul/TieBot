@@ -225,7 +225,7 @@ bot.on('message', function (msg) {
 			});
 			return;
 		}
-		result = msg.content.scan(/^!listproficiencies (.+)/g);
+		result = msg.content.scan(/^!listproficiencies (.+)$/g);
 		if (result.length > 0) {
 			let mention = result[0][0];
 			let str = 'The user ' + mention + ' is proficient in:\n';
