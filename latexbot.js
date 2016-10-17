@@ -1,6 +1,6 @@
 'use strict';
-const discord = require('discord.js');
 const Promise = require('bluebird');
+const Discord = Promise.promisifyAll(require('discord.js'));
 const fs = Promise.promisifyAll(require('fs'));
 const storage = Promise.promisifyAll(require('node-persist'));
 
@@ -156,7 +156,7 @@ try {
 }
 let markov = constructMarkov(file, 2);
 
-let bot = new discord.Client({autoReconnect: true});
+let bot = new Discord.Client({autoReconnect: true});
 
 bot.on('ready', function () {
 	console.log('Ready!');
